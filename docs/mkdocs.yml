@@ -54,25 +54,30 @@ markdown_extensions:
 
 # Generate navigation bar
 nav:
-- 'Capsule': index.md
+- 'Overview': concepts.md
 - 'Getting started': getting-started.md
-- 'Concepts': concepts.md
 - 'Tutorial': tutorial.md
+- 'Capsule Proxy':
+  - proxy/index.md
 - 'Guides':
   - guides/index.md
-  - guides/proxy.md
   - guides/oidc-auth.md
   - guides/monitoring.md
   - guides/kubernetes-dashboard.md
   - guides/velero.md
   - guides/upgrading.md
-  - guides/flux2-capsule.md
+  - guides/flux.md
   - guides/charmed.md
   - guides/pod-security.md
-  - guides/rancher.md
-  - guides/coaks.md
-  - guides/eks.md
-  - guides/gke.md
+  - guides/lens.md
+- 'Integrations':
+  - integrations/index.yaml
+  - 'Rancher':
+    - integrations/rancher/index.md
+    - integrations/rancher/capsule-rancher.md
+    - integrations/rancher/capsule-proxy-rancher.md
+  - 'Azure AKS':
+    - integrations/coaks/index.md
 - 'Reference':
   - reference/index.md
   - reference/api.md
