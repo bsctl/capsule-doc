@@ -9,8 +9,9 @@ site_author: bsctl
 site_description: >-
   Multi-tenancy and policy-based framework for Kubernetes
 
-copyright: Copyright &copy; 2020 - 2023 Capsule Authors | Documentation distributed under CC-BY-4.0
-
+copyright: >-
+  Copyright &copy; 2020 - 2023 Capsule Authors | Documentation distributed under CC-BY-4.0
+  Copyright &copy; 2023 The Linux Foundation. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks.
 theme:
   name: material
   features:
@@ -43,8 +44,8 @@ theme:
       toggle:
         icon: material/lightbulb-outline
         name: Switch to system preference
-  favicon: images/favicon.png
-  logo: images/logo.png
+  #favicon: ../assets/logo/favicon.png
+  logo: ../assets/logo/capsule_small.png
 
 markdown_extensions:
   - admonition
@@ -72,7 +73,7 @@ nav:
   - guides/coaks.md
   - guides/eks.md
   - guides/lens.md
-- 'Rancher Integration':
+- 'Rancher':
   - rancher/index.md
   - rancher/capsule-rancher.md
   - rancher/capsule-proxy-rancher.md
