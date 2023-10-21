@@ -1,0 +1,84 @@
+repo_name: projectcapsule/capsule
+repo_url: https://github.com/projectcapsule/capsule
+
+site_name: Capsule
+site_url: https://capsule.clastix.io/
+docs_dir: content
+site_dir: site
+site_author: bsctl
+site_description: >-
+  Multi-tenancy and policy-based framework for Kubernetes
+
+copyright: Copyright &copy; 2020 - 2023 Capsule Authors | Documentation distributed under CC-BY-4.0
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.indexes
+    - navigation.instant
+    - navigation.sections
+    - navigation.path
+    - navigation.footer
+    - content.code.copy
+  include_sidebar: true
+  palette:
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      primary: white
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white 
+      toggle:
+        icon: material/lightbulb
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: white
+      toggle:
+        icon: material/lightbulb-outline
+        name: Switch to system preference
+  favicon: images/favicon.png
+  logo: images/logo.png
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - md_in_html
+
+# Generate navigation bar
+nav:
+- 'Capsule': index.md
+- 'Getting started': getting-started.md
+- 'Concepts': concepts.md
+- 'Tutorial': tutorial.md
+- 'Guides':
+  - guides/index.md
+  - guides/proxy.md
+  - guides/oidc-auth.md
+  - guides/monitoring.md
+  - guides/kubernetes-dashboard.md
+  - guides/velero.md
+  - guides/upgrading.md
+  - guides/flux2-capsule.md
+  - guides/charmed.md
+  - guides/pod-security.md
+  - guides/rancher.md
+  - guides/coaks.md
+  - guides/eks.md
+  - guides/gke.md
+- 'Reference':
+  - reference/index.md
+  - reference/api.md
+  - reference/mtb.md
+- 'Contribute':
+  - 'contribute/guidelines.md'
+  - 'contribute/development.md'
+  - 'contribute/governance.md'
+  - 'contribute/release.md'
