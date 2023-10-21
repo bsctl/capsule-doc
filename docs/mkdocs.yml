@@ -8,10 +8,8 @@ site_dir: site
 site_author: bsctl
 site_description: >-
   Multi-tenancy and policy-based framework for Kubernetes
-
 copyright: >-
-  Copyright &copy; 2020 - 2023 Capsule Authors | Documentation distributed under CC-BY-4.0
-  Copyright &copy; 2023 The Linux Foundation. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks.
+  Copyright &copy; 2020-2023 Capsule Authors | Copyright &copy; 2023 The Linux Foundation.
 theme:
   name: material
   features:
@@ -26,6 +24,7 @@ theme:
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
+      scheme: slate
       primary: white
       toggle:
         icon: material/brightness-auto
@@ -44,8 +43,8 @@ theme:
       toggle:
         icon: material/lightbulb-outline
         name: Switch to system preference
-  #favicon: ../assets/logo/favicon.png
-  logo: ../assets/logo/capsule_small.png
+  #favicon: assets/logo/favicon.png
+  logo: assets/logo/capsule.png
 
 markdown_extensions:
   - admonition
@@ -55,6 +54,7 @@ markdown_extensions:
 
 # Generate navigation bar
 nav:
+- 'Home': index.md
 - 'Overview': concepts.md
 - 'Getting started': getting-started.md
 - 'Tutorial': tutorial.md
