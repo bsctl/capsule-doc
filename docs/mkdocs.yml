@@ -69,18 +69,16 @@ nav:
   - guides/flux.md
   - guides/charmed.md
   - guides/pod-security.md
+  - guides/coaks.md
+  - guides/eks.md
   - guides/lens.md
-- 'Integrations':
-  - integrations/index.yaml
-  - 'Rancher':
-    - integrations/rancher/index.md
-    - integrations/rancher/capsule-rancher.md
-    - integrations/rancher/capsule-proxy-rancher.md
-  - 'Azure AKS':
-    - integrations/coaks/index.md
+- 'Rancher Integration':
+  - rancher/index.md
+  - rancher/capsule-rancher.md
+  - rancher/capsule-proxy-rancher.md
 - 'Reference':
   - reference/index.md
-  - reference/api.md
+  - reference/apis.md
   - reference/mtb.md
 - 'Contribute':
   - 'contribute/guidelines.md'
