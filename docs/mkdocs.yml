@@ -83,7 +83,7 @@ nav:
   - rancher/oidc.md
 - 'Reference':
   - reference/index.md
-  - reference/apis.md
+  - reference/crds-api.md
   - reference/mtb.md
 - 'Contribute':
   - 'contribute/guidelines.md'
