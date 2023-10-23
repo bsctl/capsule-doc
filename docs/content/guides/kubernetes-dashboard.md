@@ -1,10 +1,10 @@
 # Kubernetes Dashboard
 
-This guide describes how to integrate the [Kubernetes Dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/) and [Capsule Proxy](https://capsule.clastix.io/docs/general/proxy/) with OIDC authorization.
+This guide describes how to integrate the [Kubernetes Dashboard](https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/) and [Capsule Proxy](../proxy/index.md) with OIDC authorization.
 
 In this guide, we will use [Keycloak](https://www.keycloak.org) as the Identity Provider.
 
-![Kubernetes Dashboard](./assets/proxy-kubernetes-dashboard.png)
+![Kubernetes Dashboard](../assets/images/proxy-kubernetes-dashboard.png)
 
 ## Configuring oauth2-proxy
 
@@ -56,7 +56,7 @@ helm install oauth2-proxy oauth2-proxy/oauth2-proxy -n ${KUBERNETES_DASHBOARD_NA
 
 ## Configuring Keycloak
 
-The Kubernetes cluster must be configured with a valid OIDC provider: for our guide, we're giving for granted that Keycloak is used, if you need more info please follow the [OIDC Authentication](/docs/guides/oidc-auth) section.
+The Kubernetes cluster must be configured with a valid OIDC provider: for our guide, we're giving for granted that Keycloak is used, if you need more info please follow the [OIDC Authentication](oidc-auth.md) guide.
 
 In a such scenario, you should have in the `kube-apiserver.yaml` manifest the following content:
 ```yaml

@@ -13,5 +13,4 @@ Capsule takes a different approach. In a single cluster, the Capsule Controller 
 
 On the other side, the Capsule Policy Engine keeps the different tenants isolated from each other. _Network and Security Policies_, _Resource Quota_, _Limit Ranges_, _RBAC_, and other policies defined at the tenant level are automatically inherited by all the namespaces in the tenant. Then users are free to operate their tenants in autonomy, without the intervention of the cluster administrator. 
 
-
-![capsule-operator](./images/capsule-operator.svg)
+![capsule-operator](assets/images/capsule-operator.svg)

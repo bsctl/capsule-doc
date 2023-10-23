@@ -59,6 +59,11 @@ nav:
 - 'Tutorial': tutorial.md
 - 'Capsule Proxy':
   - proxy/index.md
+  - proxy/overview.md
+  - proxy/install.md
+  - proxy/resources.md
+  - proxy/metrics.md
+  - proxy/references.md
 - 'Guides':
   - guides/index.md
   - guides/oidc-auth.md
@@ -71,7 +76,6 @@ nav:
   - guides/pod-security.md
   - guides/coaks.md
   - guides/eks.md
-  - guides/lens.md
 - 'Rancher':
   - rancher/index.md
   - rancher/capsule-rancher.md

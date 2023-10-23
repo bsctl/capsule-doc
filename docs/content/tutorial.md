@@ -1881,7 +1881,7 @@ EOF
 
 ## Deny labels and annotations on Nodes
 
-When using `capsule` together with [capsule-proxy](https://github.com/clastix/capsule-proxy), Bill can allow Tenant Owners to [modify Nodes](/docs/proxy/overview).
+When using `capsule` together with [capsule-proxy](https://github.com/projectcapsule/capsule-proxy), Bill can allow Tenant Owners to [modify Nodes](/docs/proxy/overview).
 
 By default, it will allow tenant owners to add and modify any label or annotation on their nodes. 
 
