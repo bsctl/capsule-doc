@@ -70,7 +70,7 @@ nav:
   - guides/monitoring.md
   - guides/kubernetes-dashboard.md
   - guides/velero.md
-  - guides/upgrading.md
+  - guides/upgrade.md
   - guides/flux.md
   - guides/charmed.md
   - guides/pod-security.md

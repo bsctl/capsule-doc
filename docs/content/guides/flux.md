@@ -65,6 +65,7 @@ Legenda:
 ### Capsule
 
 Capsule provides a Custom Resource `Tenant` and ability to set its owners through `spec.owners` as references to:
+
 - `User`
 - `Group`
 - `ServiceAccount`
@@ -110,6 +111,7 @@ Other privileged requests, e.g. for reconciliation coming from the Flux privileg
 ### Flux
 
 Flux enables to specify with which identity Reconciliation resources are reconciled, through:
+
 - `ServiceAccount` impersonation
 - `kubeconfig`
 
@@ -150,12 +152,10 @@ spec:
     name: flux-system
 ```
 
-### Kubeconfig
+### kubeconfig
 
 We also need to specify on Tenant's Reconciliation resources, the `Secret` with **`kubeconfig`** configured to use the **Capsule Proxy** as the API server in order to provide the Tenant GitOps Reconciler the ability to list cluster-level resources.
-The `kubeconfig` would specify also as the token the Tenant GitOps Reconciler SA token, 
-
-For example:
+The `kubeconfig` would specify also as the token the Tenant GitOps Reconciler SA token, for example:
 
 ```yaml
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
@@ -225,25 +225,29 @@ this is the required set of resources to setup a Tenant:
 
 - `Namespace`: the Tenant GitOps Reconciler "home". This is not part of the Tenant to avoid a chicken & egg problem:
 
-  ```yaml
-  apiVersion: v1
-  kind: Namespace
-  metadata:
-    name: my-tenant
-  ```
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-tenant
+```
 
 - `ServiceAccount` of the Tenant GitOps Reconciler, in the above `Namespace`:
-  ```yaml
-  apiVersion: v1
-  kind: ServiceAccount
-  metadata:
-    name: gitops-reconciler
-    namespace: my-tenant
-  ```
+
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gitops-reconciler
+  namespace: my-tenant
+```
   
 - `Tenant` resource with the above Tenant GitOps Reconciler's SA as Tenant Owner, with:
+
 - Additional binding to *cluster-admin* `ClusterRole` for the Tenant's `Namespace`s and `Namespace` of the Tenant GitOps Reconciler' `ServiceAccount`.
+
   By default Capsule binds only `admin` ClusterRole, which has no privileges over Custom Resources, but *cluster-admin* has. This is needed to operate on Flux CRs:
+
   ```yaml
   apiVersion: capsule.clastix.io/v1beta2
   kind: Tenant
@@ -262,6 +266,7 @@ this is the required set of resources to setup a Tenant:
   ```
 
 - Additional binding to *cluster-admin* `ClusterRole` for home `Namespace` of the Tenant GitOps Reconciler' `ServiceAccount`, so that the Tenant GitOps Reconciler can create Flux CRs on the tenant home Namespace and use Reconciliation resource's `spec.targetNamespace` to place resources to `Tenant` `Namespace`s:
+
   ```yaml
   apiVersion: rbac.authorization.k8s.io/v1
   kind: RoleBinding
@@ -279,6 +284,7 @@ this is the required set of resources to setup a Tenant:
   ```
 
 - Additional `Group` in the `CapsuleConfiguration` to make Tenant GitOps Reconciler requests pass through Capsule admission (group `system:serviceaccount:<tenant-gitops-reconciler-home-namespace>`):
+
   ```yaml
   apiVersion: capsule.clastix.io/v1alpha1
   kind: CapsuleConfiguration
@@ -290,6 +296,7 @@ this is the required set of resources to setup a Tenant:
   ```
 
 - Additional `ClusterRole` with related `ClusterRoleBinding` that allows the Tenant GitOps Reconciler to impersonate his own `User` (e.g. `system:serviceaccount:my-tenant:gitops-reconciler`):
+
   ```yaml
   apiVersion: rbac.authorization.k8s.io/v1
   kind: ClusterRole
@@ -319,6 +326,7 @@ this is the required set of resources to setup a Tenant:
   > This is supported only with Service Account static tokens.
 
 - Flux Source and Reconciliation resources that refer to Tenant desired state. This typically points to a specific path inside a dedicated Git repository, where tenant's root configuration reside: 
+
   ```yaml
   apiVersion: source.toolkit.fluxcd.io/v1beta2
   kind: GitRepository
@@ -350,6 +358,7 @@ this is the required set of resources to setup a Tenant:
 #### Generate the Capsule Proxy kubeconfig Secret
 
 You need to create a `Secret` in the Tenant GitOps Reconciler home `Namespace`, containing the `kubeconfig` that specifies:
+
 - `server`: Capsule Proxy `Service` URL with related CA certificate for TLS
 - `token`: the token of the `Tenant` GitOps Reconciler
 
@@ -366,7 +375,7 @@ $ proxy-kubeconfig-generator \
   --serviceaccount gitops-reconciler
 ```
 
-### How a Tenant can declare his state
+### How a Tenant can declare the state
 
 Considering the example above, a Tenant `my-tenant` could place in his own repository (i.e. `https://github.com/my-tenant/all`), on branch `main` at path `/config` further Reconciliation resources, like:
 
@@ -389,7 +398,7 @@ spec:
 
 that refer to the same Source but different path (i.e. `config/apps`) that could contain his applications' manifests.
 
-The same is valid for a `HelmRelease`s, that instead will refer to an `HelmRepository` Source.
+The same is valid for a `HelmRelease`, that instead will refer to an `HelmRepository` Source.
 
 The reconciliation requests will pass through Capsule Proxy as Tenant GitOps Reconciler with impersonation. Then, as the identity group of the requests matches the Capsule groups they will be validated by Capsule, and finally the RBAC will provide boundaries to Tenant GitOps Reconciler privileges.
 
@@ -422,7 +431,7 @@ Furthermore, let's see if there are other vulnerabilities we are able to protect
 
 ##### Impersonate privileged SA
 
-Then, what if a tenant tries to escalate by using one of the Flux controllers privileged `ServiceAccount`s? 
+Then, what if a tenant tries to escalate by using one of the Flux controllers privileged `ServiceAccounts` 
 
 As `spec.ServiceAccountName` for Reconciliation resource cannot cross-namespace reference Service Accounts, tenants are able to let Flux apply his own resources only with ServiceAccounts that reside in his own Namespaces. Which is, Namespace of the ServiceAccount and Namespace of the Reconciliation resource must match.
 
@@ -430,7 +439,7 @@ He could neither create the Reconciliation resource where a privileged ServiceAc
 
 ##### Create and impersonate privileged SA
 
-Then, what if a tenant tries to escalate by creating a privileged `ServiceAccount` inside on of his own `Namespace`s?
+Then, what if a tenant tries to escalate by creating a privileged `ServiceAccount` inside on of his own `Namespaces`
 
 A tenant could create a `ServiceAccount` in an owned `Namespace`, but he can't neither bind at cluster-level nor at a non-owned Namespace-level a ClusterRole, as that wouldn't be permitted by Capsule admission controllers.
 

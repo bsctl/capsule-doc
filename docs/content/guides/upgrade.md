@@ -1,4 +1,4 @@
-# Capsule upgrading guide
+# Upgrade Capsule
 
 List of Tenant API changes:
 
