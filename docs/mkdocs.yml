@@ -10,10 +10,9 @@ site_description: >-
   Multi-tenancy and policy-based framework for Kubernetes
 copyright: >-
   Copyright &copy; 2020-2023 Capsule Authors | Copyright &copy; 2023 The Linux Foundation.
+extra_css: [stylesheets/extra.css]
 theme:
   name: material
-  extra_css:
-    - stylesheets/extra.css
   features:
     - navigation.tabs
     - navigation.indexes
