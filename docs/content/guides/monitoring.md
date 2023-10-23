@@ -44,7 +44,7 @@ Take a look at the Helm charts [README.md](https://github.com/projectcapsule/cap
 
 Verify that the service monitor is working correctly through the Prometheus "targets" page :
 
-![Prometheus Targets](./assets/prometheus_targets.png)
+![Prometheus Targets](../assets/images/prometheus_targets.png)
 
 ### Deploy dashboard
 A dashboard for Grafana is provided as [dashboard.json](https://github.com/projectcapsule/capsule/blob/master/config/grafana/dashboard.json).
@@ -57,7 +57,7 @@ kubectl -n <grafana-namespace> apply -k config/grafana
 
 Alternatively, manual upload the dashboard in JSON format to Grafana through _Create -> Import_:
 
-![Grafana Import](./assets/upload_json.png)
+![Grafana Import](../assets/images/upload_json.png)
 
 ## In-depth view
 
@@ -72,7 +72,7 @@ Alternatively, manual upload the dashboard in JSON format to Grafana through _Cr
 
 #### Manager controllers
 
-![Manager controllers](./assets/manager-controllers.png)
+![Manager controllers](../assets/images/manager-controllers.png)
 
 ##### Description
 
@@ -92,7 +92,7 @@ This section provides information about the medium time delay between manager cl
 
 #### Webhook error rate
 
-![Webhook error rate](./assets/webhook-error-rate.png)
+![Webhook error rate](../assets/images/webhook-error-rate.png)
 
 ##### Description
 
@@ -113,7 +113,7 @@ This section provides information about webhook requests response, mainly focusi
 
 #### Webhook latency
 
-![Webhook latency](./assets/webhook-latency.png)
+![Webhook latency](../assets/images/webhook-latency.png)
 
 ##### Description
 
@@ -134,7 +134,7 @@ This section provides information about the medium time delay between webhook tr
 
 #### REST client latency
 
-![REST client latency](./assets/rest-client-latency.png)
+![REST client latency](../assets/images/rest-client-latency.png)
 
 ##### Description
 
@@ -155,7 +155,7 @@ YMMV
 
 #### REST client error rate
 
-![REST client error rate](./assets/rest-client-error-rate.png)
+![REST client error rate](../assets/images/rest-client-error-rate.png)
 
 ##### Description
 
@@ -163,7 +163,7 @@ This section provides information about client total rest requests response per 
 
 #### Saturation
 
-![Saturation](./assets/saturation.png)
+![Saturation](../assets/images/saturation.png)
 
 ##### Description
 
@@ -171,7 +171,7 @@ This section provides information about resources, giving a detailed picture of 
 
 #### Workqueue
 
-![Workqueue](./assets/workqueue.png)
+![Workqueue](../assets/images/workqueue.png)
 
 ##### Description
 

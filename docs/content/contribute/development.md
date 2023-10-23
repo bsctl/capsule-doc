@@ -345,3 +345,6 @@ Now it's time to work through our familiar inner loop for development in our pre
     ]
 }
 ```
+
+## Capsule Proxy
+Contributing guidelines for the `capsule-proxy` are available [here](https://github.com/projectcapsule/capsule-proxy/blob/main/CONTRIBUTING.md).

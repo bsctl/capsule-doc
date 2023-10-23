@@ -63,7 +63,7 @@ nav:
   - proxy/install.md
   - proxy/resources.md
   - proxy/metrics.md
-  - proxy/references.md
+  - proxy/reference.md
 - 'Guides':
   - guides/index.md
   - guides/oidc-auth.md
@@ -80,6 +80,7 @@ nav:
   - rancher/index.md
   - rancher/capsule-rancher.md
   - rancher/capsule-proxy-rancher.md
+  - rancher/oidc.md
 - 'Reference':
   - reference/index.md
   - reference/apis.md

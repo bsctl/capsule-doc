@@ -15,11 +15,11 @@ As an installation method, Helm is given for granted, YMMV using the `kustomize`
 We strongly suggest performing a full backup of your Kubernetes cluster, such as storage and etcd.
 Use your favourite tool according to your needs.
 
-# Upgrading from v0.2.x to v0.3.x
+## Upgrading from v0.2.x to v0.3.x
 
 A minor bump has been requested due to some missing enums in the Tenant resource.
 
-## Scale down the Capsule controller
+### Scale down the Capsule controller
 
 Using the `kubectl` or Helm, scale down the Capsule controller manager: this is required to avoid the old Capsule version from processing objects that aren't yet installed as a CRD.
 
@@ -27,7 +27,7 @@ Using the `kubectl` or Helm, scale down the Capsule controller manager: this is 
 helm upgrade -n capsule-system capsule --set "replicaCount=0" 
 ```
 
-## Patch the Tenant custom resource definition
+### Patch the Tenant custom resource definition
 
 Unfortunately, Helm doesn't manage the lifecycle of Custom Resource Definitions, additional details can be found [here](https://github.com/helm/community/blob/f9e06c16d89ccea1bea77c01a6a96ae3b309f823/architecture/crds.md).
 
@@ -37,7 +37,7 @@ This process must be executed manually as follows:
 kubectl apply -f https://raw.githubusercontent.com/clastix/capsule/v0.3.0/charts/capsule/crds/tenant-crd.yaml
 ```
 
-## Update your Capsule Helm chart
+### Update your Capsule Helm chart
 
 Ensure to update the Capsule repository to fetch the latest changes.
 
@@ -64,9 +64,9 @@ This will start the Operator with the latest changes, and perform the required s
 3. If not using the cert-manager integration, patching the Validating and Mutating Webhook Configuration resources with the Capsule CA
 4. If not using the cert-manager integration, patching the Capsule's Custom Resource Definitions conversion webhook fields with the Capsule CA
 
-# Upgrading from v0.1.3 to v0.2.x
+## Upgrading from v0.1.3 to v0.2.x
 
-## Scale down the Capsule controller
+### Scale down the Capsule controller
 
 Using the `kubectl` or Helm, scale down the Capsule controller manager: this is required to avoid the old Capsule version from processing objects that aren't yet installed as a CRD.
 
@@ -76,7 +76,7 @@ helm upgrade -n capsule-system capsule --set "replicaCount=0"
 
 > Ensure that all the Pods have been removed correctly.
 
-## Migrate manually the `CapsuleConfiguration` to the latest API version
+### Migrate manually the `CapsuleConfiguration` to the latest API version
 
 With the v0.2.x release of Capsule and the new features introduced, the resource `CapsuleConfiguration` is offering a new API version, bumped to `v1beta1` from `v1alpha1`.
 
@@ -95,7 +95,7 @@ kubectl apply -f https://raw.githubusercontent.com/clastix/capsule/v0.2.1/charts
 
 During the Helm upgrade, a new `CapsuleConfiguration` will be created: please, refer to the Helm Chart values to pick up your desired settings.
 
-## Patch the Tenant custom resource definition
+### Patch the Tenant custom resource definition
 
 Unfortunately, Helm doesn't manage the lifecycle of Custom Resource Definitions, additional details can be found [here](https://github.com/helm/community/blob/f9e06c16d89ccea1bea77c01a6a96ae3b309f823/architecture/crds.md).
 
@@ -118,7 +118,7 @@ kubectl apply -f https://raw.githubusercontent.com/clastix/capsule/v0.2.1/charts
 > done
 > ```
 
-## Update your Capsule Helm chart
+### Update your Capsule Helm chart
 
 Ensure to update the Capsule repository to fetch the latest changes.
 
@@ -145,7 +145,7 @@ This will start the Operator with the latest changes, and perform the required s
 3. If not using the cert-manager integration, patching the Validating and Mutating Webhook Configuration resources with the Capsule CA
 4. If not using the cert-manager integration, patching the Capsule's Custom Resource Definitions conversion webhook fields with the Capsule CA
 
-## Ensure the conversion webhook is working
+### Ensure the conversion webhook is working
 
 Kubernetes Custom Resource definitions provide a conversion webhook that is used by an Operator to perform a seamless conversion between resources with different versioning.
 
@@ -173,9 +173,9 @@ oil    Active   3                 0                 {"kubernetes.io/os":"linux"}
 >
 > The `kubectl replace` command must be triggered when the Capsule webhook is up and running to allow the conversion between versions.
 
-# Upgrading from < v0.1.0 up to v0.1.3
+## Upgrading from < v0.1.0 up to v0.1.3
 
-## Uninstall the old Capsule release
+### Uninstall the old Capsule release
 
 If you're using Helm as package manager, all the Operator resources such as Deployment, Service, Role Binding, etc. must be deleted.
 
@@ -185,7 +185,7 @@ helm uninstall -n capsule-system capsule
 
 Ensure that everything has been removed correctly, especially the Secret resources.
 
-## Patch the Tenant custom resource definition
+### Patch the Tenant custom resource definition
 
 Unfortunately, Helm doesn't manage the lifecycle of Custom Resource Definitions, additional details can be found [here](https://github.com/helm/community/blob/f9e06c16d89ccea1bea77c01a6a96ae3b309f823/architecture/crds.md).
 
@@ -197,7 +197,7 @@ kubectl apply -f https://raw.githubusercontent.com/clastix/capsule/v0.1.0/charts
 
 > Please note the Capsule version in the said URL, your mileage may vary according to the desired upgrading version.
 
-## Install the Capsule operator using Helm
+### Install the Capsule operator using Helm
 
 Since the Tenant custom resource definition has been patched with new fields, we can install back Capsule using the provided Helm chart.
 
@@ -216,7 +216,7 @@ This will start the operator that will perform several required actions, such as
 3. Patching the Validating and Mutating Webhook Configuration resources with the fresh new CA
 4. Patching the Custom Resource Definition tenant conversion webhook CA
 
-## Ensure the conversion webhook is working
+### Ensure the conversion webhook is working
 
 Kubernetes Custom Resource definitions provide a conversion webhook that is used by an Operator to perform a seamless conversion between resources with different versioning.
 

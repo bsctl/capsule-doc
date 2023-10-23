@@ -2,11 +2,9 @@
 
 This guide explains how to setup the integration between Capsule and Rancher Projects.
 
-It then explains how for the tenant user, the access to Kubernetes resources is transparent.
-
 ## Manually
 
-## Pre-requisites
+### Pre-requisites
 
 - An authentication provider in Rancher, e.g. an OIDC identity provider
 - A *Tenant Member* `Cluster Role` in Rancher
@@ -19,7 +17,7 @@ For a Keycloak specific setup yon can check [this resources list](./oidc-keycloa
 
 #### Known issues
 
-##### Keycloak new URLs without `/auth` makes Rancher crash
+Keycloak new URLs without `/auth` makes Rancher crash
 
 - [rancher/rancher#38480](https://github.com/rancher/rancher/issues/38480)
 - [rancher/rancher#38683](https://github.com/rancher/rancher/issues/38683)
@@ -115,19 +113,18 @@ the `Namespace` is now part of both the Tenant and the Project.
 > kubectl get namespace -l field.cattle.io/projectId=${PROJECT_ID}
 > ```
 
-### Additional administration
 
-#### Project monitoring
+### Project monitor
 
 Before proceeding is recommended to read the official Rancher documentation about [Project Monitors](https://ranchermanager.docs.rancher.com/v2.6/how-to-guides/advanced-user-guides/monitoring-alerting-guides/prometheus-federator-guides/project-monitors).
 
 In summary, the setup is composed by a cluster-level Prometheus, Prometheus Federator via which single Project-level Prometheus federate to.
 
-#### Network isolation
+### Network isolation
 
 Before proceeding is recommended to read the official Capsule documentation about [`NetworkPolicy` at `Tenant`-level](https://capsule.clastix.io/docs/general/tutorial/#assign-network-policies)`.
 
-##### Network isolation and Project Monitor
+### Network isolation and Project monitor
 
 As Rancher's Project Monitor deploys the Prometheus stack in a `Namespace` that is not part of **neither** the `Project` **nor** the `Tenant` `Namespace`s, is important to apply the label selectors in the `NetworkPolicy` `ingress` rules to the `Namespace` created by Project Monitor.
 

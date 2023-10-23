@@ -1,4 +1,4 @@
-# Configure OIDC authentication with Keycloak
+# OIDC Authentication with Keycloak
 
 ## Pre-requisites
 
@@ -15,8 +15,6 @@ These instructions is specific to a setup made with Keycloak as an OIDC identity
 - Add to userinfo Audience type, claim name `client audience`
 - Add to userinfo, full group path, Group Membership type, claim name `full_group_path`
 
-More on this on the [official guide](https://capsule.clastix.io/docs/guides/oidc-auth/#configuring-oidc-server).
-
 ## Rancher OIDC authentication provider
 
 Configure an OIDC authentication provider, with Client with issuer, return URLs specific to the Keycloak setup.
@@ -25,9 +23,7 @@ Configure an OIDC authentication provider, with Client with issuer, return URLs 
 >
 > Add custom paths, remove `/auth` subpath in return and issuer URLs.
 
-## Configuration
-
-### Configure Tenant users
+## Configure Tenant users
 
 1. In Rancher, configure OIDC authentication with Keycloak to use [with Rancher](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/authentication-config/configure-keycloak-oidc).
 1. In Keycloak, Create a Group in the rancher Realm: *capsule.clastix.io*.

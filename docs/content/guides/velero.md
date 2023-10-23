@@ -1,4 +1,4 @@
-# Tenants Backup and Restore with Velero
+# Backup and Restore with Velero
 
 [Velero](https://velero.io) is a backup and restore solution that performs data protection, disaster recovery and migrates Kubernetes cluster from on-premises to the Cloud or between different Clouds.
 

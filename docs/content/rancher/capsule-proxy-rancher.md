@@ -2,8 +2,6 @@
 
 This guide explains how to setup the integration between Capsule Proxy and Rancher Projects.
 
-It then explains how for the tenant user, the access to Kubernetes cluster-wide resources is transparent.
-
 ## Rancher Shell and Capsule
 
 In order to integrate the Rancher Shell with Capsule it's needed to route the Kubernetes API requests made from the shell, via Capsule Proxy.
@@ -120,9 +118,9 @@ spec:
 ```
 
 The same appplies for:
+
 - `Nodes`
 - `StorageClasses`
 - `IngressClasses`
 - `PriorityClasses`
 
-More on this in the [official documentation](https://capsule.clastix.io/docs/general/proxy#tenant-owner-authorization).
