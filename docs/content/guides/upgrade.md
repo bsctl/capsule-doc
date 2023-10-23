@@ -230,5 +230,6 @@ NAME   STATE    NAMESPACE QUOTA   NAMESPACE COUNT   NODE SELECTOR               
 oil    Active   3                 0                 {"kubernetes.io/os":"linux"}   3m38s
 ```
 
-> Resources are still persisted in etcd using the v1alpha1 specification and the conversion is executed on-the-fly thanks to the conversion webhook.
-> If you'd like to decrease the pressure on Capsule due to the conversion webhook, we suggest performing a resource patching using the command kubectl replace: in this way, the API Server will update the etcd key with the specification according to the new versioning, allowing to skip the conversion.
+Resources are still persisted in etcd using the v1alpha1 specification and the conversion is executed on-the-fly thanks to the conversion webhook.
+
+If you'd like to decrease the pressure on Capsule due to the conversion webhook, we suggest performing a resource patching using the command kubectl replace: in this way, the API Server will update the etcd key with the specification according to the new versioning, allowing to skip the conversion.
