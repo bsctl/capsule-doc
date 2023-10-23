@@ -11,7 +11,7 @@ This guide explains how to setup the integration between Capsule and Rancher Pro
 
 ### Configure an identity provider for Kubernetes
 
-You can follow [this general guide](https://capsule.clastix.io/docs/guides/oidc-auth) to configure an OIDC authentication for Kubernetes.
+You can follow the Kubernetes [guide](https://kubernetes.io/docs/reference/access-authn-authz/authentication/) to configure an OIDC authentication for Kubernetes.
 
 For a Keycloak specific setup yon can check [this resources list](./oidc-keycloak.md).
 
@@ -97,12 +97,12 @@ From the tenant user perspective both CLI and the UI are valid interfaces to com
 
 the `Namespace` is now part of both the Tenant and the Project.
 
-> As administrator, you can verify with:
->
-> ```shell
-> kubectl get tenant ${TENANT_NAME} -o jsonpath='{.status}'
-> kubectl get namespace -l field.cattle.io/projectId=${PROJECT_ID}
-> ```
+As administrator, you can verify with:
+
+```shell
+kubectl get tenant ${TENANT_NAME} -o jsonpath='{.status}'
+kubectl get namespace -l field.cattle.io/projectId=${PROJECT_ID}
+```
 
 #### From UI
 
@@ -111,23 +111,23 @@ the `Namespace` is now part of both the Tenant and the Project.
 
 the `Namespace` is now part of both the Tenant and the Project.
 
-> As administrator, you can verify with:
->
-> ```shell
-> kubectl get tenant ${TENANT_NAME} -o jsonpath='{.status}'
-> kubectl get namespace -l field.cattle.io/projectId=${PROJECT_ID}
-> ```
+As administrator, you can verify with:
+
+```shell
+kubectl get tenant ${TENANT_NAME} -o jsonpath='{.status}'
+kubectl get namespace -l field.cattle.io/projectId=${PROJECT_ID}
+```
 
 
 ### Project monitor
 
-Before proceeding is recommended to read the official Rancher documentation about [Project Monitors](https://ranchermanager.docs.rancher.com/v2.6/how-to-guides/advanced-user-guides/monitoring-alerting-guides/prometheus-federator-guides/project-monitors).
+Before proceeding is recommended to read the official Rancher documentation about [Project Monitors](https://ranchermanager.docs.rancher.com).
 
 In summary, the setup is composed by a cluster-level Prometheus, Prometheus Federator via which single Project-level Prometheus federate to.
 
 ### Network isolation
 
-Before proceeding is recommended to read the official Capsule documentation about [`NetworkPolicy` at `Tenant`-level](https://capsule.clastix.io/docs/general/tutorial/#assign-network-policies)`.
+Before proceeding is recommended to read the official Capsule documentation about NetworkPolicy at Tenant level.
 
 ### Network isolation and Project monitor
 
@@ -205,5 +205,3 @@ spec:
 ## Cluster-wide resources and Rancher Shell interface
 
 For using the Rancher Shell and cluster-wide resources as tenant user, please follow [this guide](./capsule-proxy-rancher.md).
-
-

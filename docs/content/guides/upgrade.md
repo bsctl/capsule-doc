@@ -107,16 +107,14 @@ kubectl apply -f https://raw.githubusercontent.com/clastix/capsule/v0.2.1/charts
 kubectl apply -f https://raw.githubusercontent.com/clastix/capsule/v0.2.1/charts/capsule/crds/tenantresources-crd.yaml
 ```
 
-> We're giving for granted that Capsule is installed in the `capsule-system` Namespace.
-> According to your needs you can change the Namespace at your wish, e.g.:
->
-> ```bash
-> CUSTOM_NS="tenancy-operations"
-> 
-> for CR in capsuleconfigurations.capsule.clastix.io globaltenantresources.capsule.clastix.io tenantresources.capsule.clastix.io tenants.capsule.clastix.io; do
->   kubectl patch crd capsuleconfigurations.capsule.clastix.io --type='json' -p=" [{'op': 'replace', 'path': '/spec/conversion/webhook/clientConfig/service/namespace', 'value': "${CUSTOM_NS}"}]"
-> done
-> ```
+We're giving for granted that Capsule is installed in the `capsule-system` Namespace. According to your needs you can change the Namespace at your wish, e.g.:
+
+```bash
+CUSTOM_NS="tenancy-operations" 
+for CR in capsuleconfigurations.capsule.clastix.io globaltenantresources.capsule.clastix.io tenantresources.capsule.clastix.io tenants.capsule.clastix.io; do
+kubectl patch crd capsuleconfigurations.capsule.clastix.io --type='json' -p=" [{'op': 'replace', 'path': '/spec/conversion/webhook/clientConfig/service/namespace', 'value': "${CUSTOM_NS}"}]"
+done
+```
 
 ### Update your Capsule Helm chart
 
@@ -167,11 +165,7 @@ NAME   STATE    NAMESPACE QUOTA   NAMESPACE COUNT   NODE SELECTOR               
 oil    Active   3                 0                 {"kubernetes.io/os":"linux"}   3m38s
 ```
 
-> Resources are still persisted in etcd using the previous Tenant version (`v1beta1`) and the conversion is executed on-the-fly thanks to the conversion webhook.
-> If you'd like to decrease the pressure on Capsule due to the conversion webhook, we suggest performing a resource patching using the command `kubectl replace`:
-> in this way, the API Server will update the etcd key with the specification according to the new versioning, allowing to skip the conversion.
->
-> The `kubectl replace` command must be triggered when the Capsule webhook is up and running to allow the conversion between versions.
+Resources are still persisted in etcd using the previous Tenant version (`v1beta1`) and the conversion is executed on-the-fly thanks to the conversion webhook. If you'd like to decrease the pressure on Capsule due to the conversion webhook, we suggest performing a resource patching using the command `kubectl replace`: in this way, the API Server will update the etcd key with the specification according to the new versioning, allowing to skip the conversion. The `kubectl replace` command must be triggered when the Capsule webhook is up and running to allow the conversion between versions.
 
 ## Upgrading from < v0.1.0 up to v0.1.3
 
@@ -205,9 +199,7 @@ Since the Tenant custom resource definition has been patched with new fields, we
 helm upgrade --install capsule clastix/capsule -n capsule-system --create-namespace --version=DESIRED_VERSION
 ```
 
-> Please, note the `DESIRED_VERSION`: you have to pick the Helm chart version according to the Capsule version you'd like to upgrade to.
->
-> You can retrieve it by browsing the GitHub source code picking the Capsule tag as ref and inspecting the file `Chart.yaml` available in the folder `charts/capsule`.
+Please, note the `DESIRED_VERSION`: you have to pick the Helm chart version according to the Capsule version you'd like to upgrade to. You can retrieve it by browsing the GitHub source code picking the Capsule tag as ref and inspecting the file `Chart.yaml` available in the folder `charts/capsule`.
 
 This will start the operator that will perform several required actions, such as:
 

@@ -25,12 +25,12 @@ Configure an OIDC authentication provider, with Client with issuer, return URLs 
 
 ## Configure Tenant users
 
-1. In Rancher, configure OIDC authentication with Keycloak to use [with Rancher](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/authentication-config/configure-keycloak-oidc).
+1. In Rancher, configure OIDC authentication with Keycloak, see this [guide](https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/authentication-permissions-and-global-configuration/authentication-config/configure-keycloak-oidc).
 1. In Keycloak, Create a Group in the rancher Realm: *capsule.clastix.io*.
 1. In Keycloak, Create a User in the rancher Realm, member of *capsule.clastix.io* Group.
 1. In the Kubernetes target cluster, update the `CapsuleConfiguration` by adding the `"keycloakoidc_group://capsule.clastix.io"` Kubernetes `Group`.
 1. Login to Rancher with Keycloak with the new user.
 1. In Rancher as an administrator, set the user  custom role with `get` of Cluster.
 1. In Rancher as an administrator, add the Rancher user ID of the just-logged in user as Owner of a `Tenant`.
-1. (optional) configure `proxySettings` for the `Tenant` to enable tenant users to access cluster-wide resources.
+1. Optionally, configure `proxySettings` for the `Tenant` to enable tenant users to access cluster-wide resources.
 
