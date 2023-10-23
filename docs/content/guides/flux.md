@@ -1,13 +1,15 @@
 # Multi-tenancy the GitOps way
 
-This guide is intended to cover how to use Flux v2 with [multi-tenancy lockdown features](https://fluxcd.io/docs/installation/#multi-tenancy-lockdown) with Capsule and Capsule Proxy together, to enable a Namespace-as-a-Service the GitOps-way.
+This guide is intended to cover how to use Flux v2 with multi-tenancy lockdown [features](https://fluxcd.io/docs/installation/#multi-tenancy-lockdown) with Capsule and Capsule Proxy together, to enable a Namespace-as-a-Service the GitOps-way.
 
-### Flux and multi-tenancy
+## Flux and multi-tenancy
 
-Flux v2 released a [set of features](https://fluxcd.io/blog/2022/05/may-2022-security-announcement/#whats-next-for-flux) that further increased security for multi-tenancy scenarios.
+Flux v2 released a set of [features](https://fluxcd.io/blog/2022/05/may-2022-security-announcement/#whats-next-for-flux) that further increased security for multi-tenancy scenarios.
 
 These features enable you to:
+
 - disable cross-Namespace reference of Source CRs from Reconciliation CRs and Notification CRs. This way, especially for tenants, they can't access resources outside their space. This can be achieved with `--no-cross-namespace-refs=true` option of kustomize, helm, notification, image-reflector, image-automation controllers.
+
 - set a default `ServiceAccount` impersonation for Reconciliation CRs. This is supposed to be an unprivileged SA that reconciles just the tenant's desired state. This will be enforced when is not otherwise specified explicitly in Reconciliation CR spec. This can be enforced with the `--default-service-account=<name>` option of helm and kustomize controllers.
 
   > For this responsibility we identify a Tenant GitOps Reconciler identity, which is a ServiceAccount and it's also the tenant owner (more on tenants and owners later on, with Capsule).
@@ -37,27 +39,28 @@ spec:
 In example, the cluster admin is supposed to apply this Kustomization, during the cluster bootstrap that i.e. will reconcile also Flux itself.
 All the remaining Reconciliation resources can be children of this Kustomization.
 
-![bootstrap](./assets/kustomization-hierarchy-root-tenants.png)
+![bootstrap](../assets/images/kustomization-hierarchy-root-tenants.png)
 
-### Namespace-as-a-Service
+## Namespace-as-a-Service
 
 Tenants could have his own set of Namespaces to operate on but it should be prepared by higher-level roles, like platform admins: the declarations would be part of the platform space.
 They would be responsible of tenants administration, and each change (e.g. new tenant Namespace) should be a request that would pass through approval.
 
-![no-naas](./assets/flux-tenants-reconciliation.png)
+![no-naas](../assets/images/flux-tenants-reconciliation.png)
 
 What if we would like to provide tenants the ability to manage also their own space the GitOps-way? Enter Capsule.
 
-![naas](./assets/flux-tenants-capsule-reconciliation.png)
+![naas](../assets/images/flux-tenants-capsule-reconciliation.png)
 
 ## The ingredients of the recipe
 
-> Legenda:
-> - Privileged space: group of Namespaces which are not part of any Tenant.
-> - Privileged identity: identity that won't pass through Capsule tenant access control.
-> - Unprivileged space: group of Namespaces which are part of a Tenant.
-> - Unprivileged identity: identity that would pass through Capsule tenant access control.
-> - Tenant GitOps Reconciler: a machine Tenant Owner expected to reconcile Tenant desired state.
+Legenda:
+
+- Privileged space: group of Namespaces which are not part of any Tenant.
+- Privileged identity: identity that won't pass through Capsule tenant access control.
+- Unprivileged space: group of Namespaces which are part of a Tenant.
+- Unprivileged identity: identity that would pass through Capsule tenant access control.
+- Tenant GitOps Reconciler: a machine Tenant Owner expected to reconcile Tenant desired state.
 
 ### Capsule
 
@@ -66,7 +69,7 @@ Capsule provides a Custom Resource `Tenant` and ability to set its owners throug
 - `Group`
 - `ServiceAccount`
 
-#### Tenant and Tenant Owner
+### Tenant and Tenant Owner
 
 We would like to let a machine reconcile Tenant's states, we'll need a `ServiceAccount` as a Tenant Owner:
 
@@ -88,7 +91,7 @@ spec:
 
 From now on, we'll refer to it as the **Tenant GitOps Reconciler**.
 
-#### Tenant Groups
+### Tenant Groups
 
 We also need to state that Capsule should enforce tenant access control for requests coming from tenants, and we can do that by specifying one of the `Group`s bound by default by Kubernetes to the Tenant GitOps Reconciler `ServiceAccount` in the `CapsuleConfiguration`:
 
@@ -110,7 +113,7 @@ Flux enables to specify with which identity Reconciliation resources are reconci
 - `ServiceAccount` impersonation
 - `kubeconfig`
 
-#### ServiceAccount
+### ServiceAccount
 
 As by default Flux reconciles those resources with Flux `cluster-admin` Service Accounts, we set at controller-level the **default `ServiceAccount` impersonation** to the unprivileged **Tenant GitOps Reconciler**:
 
@@ -147,7 +150,7 @@ spec:
     name: flux-system
 ```
 
-#### Kubeconfig
+### Kubeconfig
 
 We also need to specify on Tenant's Reconciliation resources, the `Secret` with **`kubeconfig`** configured to use the **Capsule Proxy** as the API server in order to provide the Tenant GitOps Reconciler the ability to list cluster-level resources.
 The `kubeconfig` would specify also as the token the Tenant GitOps Reconciler SA token, 
@@ -180,7 +183,7 @@ To deepen on this please go to [#Insights](#insights).
 
 ### How to setup Tenants GitOps-ready
 
-Given that [Capsule](github.com/projectcapsule/capsule) and [Capsule Proxy](github.com/clastix/capsule-proxy) are installed, and [Flux v2](https://github.com/fluxcd/flux2) configured with [multi-tenancy lockdown](https://fluxcd.io/docs/installation/#multi-tenancy-lockdown) features, of which the patch below:
+Given that Capsule and Capsule Proxy are installed, and Flux configured with multi-tenancy lockdown features, of which the patch below:
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -219,13 +222,16 @@ patches:
 ```
 
 this is the required set of resources to setup a Tenant:
+
 - `Namespace`: the Tenant GitOps Reconciler "home". This is not part of the Tenant to avoid a chicken & egg problem:
+
   ```yaml
   apiVersion: v1
   kind: Namespace
   metadata:
     name: my-tenant
   ```
+
 - `ServiceAccount` of the Tenant GitOps Reconciler, in the above `Namespace`:
   ```yaml
   apiVersion: v1
@@ -234,6 +240,7 @@ this is the required set of resources to setup a Tenant:
     name: gitops-reconciler
     namespace: my-tenant
   ```
+  
 - `Tenant` resource with the above Tenant GitOps Reconciler's SA as Tenant Owner, with:
 - Additional binding to *cluster-admin* `ClusterRole` for the Tenant's `Namespace`s and `Namespace` of the Tenant GitOps Reconciler' `ServiceAccount`.
   By default Capsule binds only `admin` ClusterRole, which has no privileges over Custom Resources, but *cluster-admin* has. This is needed to operate on Flux CRs:
@@ -253,6 +260,7 @@ this is the required set of resources to setup a Tenant:
     - name: system:serviceaccount:my-tenant:gitops-reconciler
       kind: ServiceAccount
   ```
+
 - Additional binding to *cluster-admin* `ClusterRole` for home `Namespace` of the Tenant GitOps Reconciler' `ServiceAccount`, so that the Tenant GitOps Reconciler can create Flux CRs on the tenant home Namespace and use Reconciliation resource's `spec.targetNamespace` to place resources to `Tenant` `Namespace`s:
   ```yaml
   apiVersion: rbac.authorization.k8s.io/v1
@@ -269,6 +277,7 @@ this is the required set of resources to setup a Tenant:
     name: gitops-reconciler
     namespace: my-tenant
   ```
+
 - Additional `Group` in the `CapsuleConfiguration` to make Tenant GitOps Reconciler requests pass through Capsule admission (group `system:serviceaccount:<tenant-gitops-reconciler-home-namespace>`):
   ```yaml
   apiVersion: capsule.clastix.io/v1alpha1
@@ -279,6 +288,7 @@ this is the required set of resources to setup a Tenant:
     userGroups:
     - system:serviceaccounts:my-tenant
   ```
+
 - Additional `ClusterRole` with related `ClusterRoleBinding` that allows the Tenant GitOps Reconciler to impersonate his own `User` (e.g. `system:serviceaccount:my-tenant:gitops-reconciler`):
   ```yaml
   apiVersion: rbac.authorization.k8s.io/v1
@@ -304,8 +314,10 @@ this is the required set of resources to setup a Tenant:
     kind: ServiceAccount
     namespace: my-tenant
   ```
+
 - `Secret` with `kubeconfig` for the Tenant GitOps Reconciler with Capsule Proxy as `kubeconfig.server` and the SA token as `kubeconfig.token`.
   > This is supported only with Service Account static tokens.
+
 - Flux Source and Reconciliation resources that refer to Tenant desired state. This typically points to a specific path inside a dedicated Git repository, where tenant's root configuration reside: 
   ```yaml
   apiVersion: source.toolkit.fluxcd.io/v1beta2

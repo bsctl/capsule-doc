@@ -117,4 +117,4 @@ Error from server (Forbidden): pods is forbidden:
 User "alice" cannot list resource "pods" in API group "" in the namespace "kube-system"
 ```
 
-See the [tutorial](/docs/general/tutorial) for getting more cool things you can do with Capsule.
+See the [tutorial](tutorial.d) for getting more cool things you can do with Capsule.

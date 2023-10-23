@@ -1,4 +1,4 @@
-# Implementing a multi-tenant scenario in Kubernetes
+# Implementing a multi-tenant scenario
 
 Capsule is a framework to implement multi-tenant and policy-driven scenarios in Kubernetes. In this tutorial, we'll focus on a hypothetical case covering the main features of the Capsule Operator.
 
