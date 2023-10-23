@@ -1,6 +1,6 @@
 # Introduction
 
-The integration between Rancher and Capsule, aims to provide a multi-tenant Kubernetes service to users, enabling:
+The integration between [Rancher](https://www.rancher.com/) and Capsule, aims to provide a multi-tenant Kubernetes service to users, enabling:
 
 - a self-service approach
 - access to cluster-wide resources

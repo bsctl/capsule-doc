@@ -154,8 +154,7 @@ spec:
 
 ### kubeconfig
 
-We also need to specify on Tenant's Reconciliation resources, the `Secret` with **`kubeconfig`** configured to use the **Capsule Proxy** as the API server in order to provide the Tenant GitOps Reconciler the ability to list cluster-level resources.
-The `kubeconfig` would specify also as the token the Tenant GitOps Reconciler SA token, for example:
+We also need to specify on Tenant's Reconciliation resources, the `Secret` with **`kubeconfig`** configured to use the **Capsule Proxy** as the API server in order to provide the Tenant GitOps Reconciler the ability to list cluster-level resources. The `kubeconfig` would specify also as the token the Tenant GitOps Reconciler SA token, for example:
 
 ```yaml
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
@@ -244,116 +243,116 @@ metadata:
   
 - `Tenant` resource with the above Tenant GitOps Reconciler's SA as Tenant Owner, with:
 
-- Additional binding to *cluster-admin* `ClusterRole` for the Tenant's `Namespace`s and `Namespace` of the Tenant GitOps Reconciler' `ServiceAccount`.
+- Additional binding to *cluster-admin* `ClusterRole` for the Tenant's `Namespace`s and `Namespace` of the Tenant GitOps Reconciler' `ServiceAccount`. By default Capsule binds only `admin` ClusterRole, which has no privileges over Custom Resources, but *cluster-admin* has. This is needed to operate on Flux CRs:
 
-  By default Capsule binds only `admin` ClusterRole, which has no privileges over Custom Resources, but *cluster-admin* has. This is needed to operate on Flux CRs:
-
-  ```yaml
-  apiVersion: capsule.clastix.io/v1beta2
-  kind: Tenant
-  metadata:
-    name: my-tenant
-  spec:
-    additionalRoleBindings:
-    - clusterRoleName: cluster-admin
-      subjects:
-      - name: gitops-reconciler
-        kind: ServiceAccount
-        namespace: my-tenant
-    owners:
-    - name: system:serviceaccount:my-tenant:gitops-reconciler
+```yaml
+apiVersion: capsule.clastix.io/v1beta2
+kind: Tenant
+metadata:
+  name: my-tenant
+spec:
+  additionalRoleBindings:
+  - clusterRoleName: cluster-admin
+    subjects:
+    - name: gitops-reconciler
       kind: ServiceAccount
-  ```
+      namespace: my-tenant
+  owners:
+  - name: system:serviceaccount:my-tenant:gitops-reconciler
+    kind: ServiceAccount
+```
 
 - Additional binding to *cluster-admin* `ClusterRole` for home `Namespace` of the Tenant GitOps Reconciler' `ServiceAccount`, so that the Tenant GitOps Reconciler can create Flux CRs on the tenant home Namespace and use Reconciliation resource's `spec.targetNamespace` to place resources to `Tenant` `Namespace`s:
 
-  ```yaml
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: RoleBinding
-  metadata:
-    name: gitops-reconciler
-    namespace: my-tenant
-  roleRef:
-    apiGroup: rbac.authorization.k8s.io
-    kind: ClusterRole
-    name: cluster-admin
-  subjects:
-  - kind: ServiceAccount
-    name: gitops-reconciler
-    namespace: my-tenant
-  ```
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: gitops-reconciler
+  namespace: my-tenant
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: gitops-reconciler
+  namespace: my-tenant
+```
 
 - Additional `Group` in the `CapsuleConfiguration` to make Tenant GitOps Reconciler requests pass through Capsule admission (group `system:serviceaccount:<tenant-gitops-reconciler-home-namespace>`):
 
-  ```yaml
-  apiVersion: capsule.clastix.io/v1alpha1
-  kind: CapsuleConfiguration
-  metadata:
-    name: default
-  spec:
-    userGroups:
-    - system:serviceaccounts:my-tenant
-  ```
+```yaml
+apiVersion: capsule.clastix.io/v1alpha1
+kind: CapsuleConfiguration
+metadata:
+  name: default
+spec:
+  userGroups:
+  - system:serviceaccounts:my-tenant
+```
 
 - Additional `ClusterRole` with related `ClusterRoleBinding` that allows the Tenant GitOps Reconciler to impersonate his own `User` (e.g. `system:serviceaccount:my-tenant:gitops-reconciler`):
 
-  ```yaml
-  apiVersion: rbac.authorization.k8s.io/v1
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: my-tenant-gitops-reconciler-impersonator
+rules:
+- apiGroups: [""]
+  resources: ["users"]
+  verbs: ["impersonate"]
+  resourceNames: ["system:serviceaccount:my-tenant:gitops-reconciler"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: my-tenant-gitops-reconciler-impersonate
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  metadata:
-    name: my-tenant-gitops-reconciler-impersonator
-  rules:
-  - apiGroups: [""]
-    resources: ["users"]
-    verbs: ["impersonate"]
-    resourceNames: ["system:serviceaccount:my-tenant:gitops-reconciler"]
-  ---
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: ClusterRoleBinding
-  metadata:
-    name: my-tenant-gitops-reconciler-impersonate
-  roleRef:
-    apiGroup: rbac.authorization.k8s.io
-    kind: ClusterRole
-    name: my-tenant-gitops-reconciler-impersonator
-  subjects:
-  - name: gitops-reconciler
-    kind: ServiceAccount
-    namespace: my-tenant
-  ```
+  name: my-tenant-gitops-reconciler-impersonator
+subjects:
+- name: gitops-reconciler
+  kind: ServiceAccount
+  namespace: my-tenant
+```
 
 - `Secret` with `kubeconfig` for the Tenant GitOps Reconciler with Capsule Proxy as `kubeconfig.server` and the SA token as `kubeconfig.token`.
+
   > This is supported only with Service Account static tokens.
 
 - Flux Source and Reconciliation resources that refer to Tenant desired state. This typically points to a specific path inside a dedicated Git repository, where tenant's root configuration reside: 
 
-  ```yaml
-  apiVersion: source.toolkit.fluxcd.io/v1beta2
-  kind: GitRepository
-  metadata:
+```yaml
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: my-tenant
+  namespace: my-tenant
+spec:
+  url: https://github.com/my-tenant/all.git # Git repository URL
+  ref:
+    branch: main # Git reference
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: my-tenant
+  namespace: my-tenant
+spec:
+  kubeConfig:
+    secretRef:
+      name: gitops-reconciler-kubeconfig
+      key: kubeconfig
+  sourceRef:
+    kind: GitRepository
     name: my-tenant
-    namespace: my-tenant
-  spec:
-    url: https://github.com/my-tenant/all.git # Git repository URL
-    ref:
-      branch: main # Git reference
-  ---
-  apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
-  kind: Kustomization
-  metadata:
-    name: my-tenant
-    namespace: my-tenant
-  spec:
-    kubeConfig:
-      secretRef:
-        name: gitops-reconciler-kubeconfig
-        key: kubeconfig
-    sourceRef:
-      kind: GitRepository
-      name: my-tenant
-    path: config # Path to config from GitRepository Source
-  ```
-  This `Kustomization` can in turn refer to further `Kustomization` resources creating a tenant configuration hierarchy.
+  path: config # Path to config from GitRepository Source
+```
+
+This `Kustomization` can in turn refer to further `Kustomization` resources creating a tenant configuration hierarchy.
 
 #### Generate the Capsule Proxy kubeconfig Secret
 
