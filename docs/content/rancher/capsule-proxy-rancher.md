@@ -27,10 +27,12 @@ In both CLI and dashboard use cases, the [Cluster Agent](https://ranchermanager.
 In a standard setup, the Cluster Agents communicates to the API server. In this setup it will communicate with Capsule Proxy to ensure filtering of cluster-scope resources, for Tenants.
 
 Cluster Agents accepts as arguments:
+
 - `KUBERNETES_SERVICE_HOST` environment variable
 - `KUBERNETES_SERVICE_PORT` environment variable
 
 which will be set, at cluster import-time, to the values of the Capsule Proxy `Service`. For example:
+
 - `KUBERNETES_SERVICE_HOST=capsule-proxy.capsule-system.svc`
 - (optional) `KUBERNETES_SERVICE_PORT=9001`. You can skip it by installing Capsule Proxy with Helm value `service.port=443`.
 
@@ -52,11 +54,13 @@ kubectl create secret tls -n capsule-system kubernetes-ca-key-pair --cert=/path/
 ```
 
 When installing Capsule Proxy with Helm chart, it's needed to specify to generate Capsule Proxy `Certificate`s with Cert Manager with an external `ClusterIssuer`:
+
 - `certManager.externalCA.enabled=true`
 - `certManager.externalCA.secretName=kubernetes-ca-key-pair`
 - `certManager.generateCertificates=true`
 
 and disable the job for generating the certificates without Cert Manager:
+
 - `options.generateCertificates=false`
 
 ### Enable tenant users access cluster resources
